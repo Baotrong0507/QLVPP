@@ -67,7 +67,7 @@ public class PhieuNhapGUI extends JPanel {
         });
 
         btnAdd.addActionListener(e -> {
-            PhieuNhapForm form = new PhieuNhapForm(null, "Thêm phiếu nhập", null);
+            ChiTietPhieuNhapForm form = new ChiTietPhieuNhapForm(null, "Thêm phiếu nhập", null);
             form.setVisible(true);
             PhieuNhap pn = form.getPhieuNhap();
             if (pn != null) {
@@ -84,7 +84,7 @@ public class PhieuNhapGUI extends JPanel {
             if (row >= 0) {
                 int maPN = (int) model.getValueAt(row, 0);
 PhieuNhap old = bus.getAll().stream().filter(p -> p.getMaPN() == maPN).findFirst().orElse(null);
-                PhieuNhapForm form = new PhieuNhapForm(null, "Sửa phiếu nhập", old);
+                ChiTietPhieuNhapForm form = new ChiTietPhieuNhapForm(null, "Sửa phiếu nhập", old);
                 form.setVisible(true);
                 PhieuNhap pn = form.getPhieuNhap();
                 if (pn != null) {
