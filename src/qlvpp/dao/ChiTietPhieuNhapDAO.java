@@ -1,0 +1,76 @@
+package qlvpp.dao;
+
+import qlvpp.model.ChiTietPhieuNhap;
+import java.sql.*;
+import java.util.*;
+import qlvpp.connections.Myconnections;
+public class ChiTietPhieuNhapDAO {
+    public List<ChiTietPhieuNhap> getByMaPN(int maPN) {
+        List<ChiTietPhieuNhap> list = new ArrayList<>();
+        try (Connection conn = Myconnections.getConnection()) {
+            String sql = "SELECT * FROM ChiTietPhieuNhap WHERE MaPN = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, maPN);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ChiTietPhieuNhap ct = new ChiTietPhieuNhap(
+                    rs.getInt("MaPN"),
+                    rs.getInt("MaSP"),
+                    rs.getInt("SoLuong"),
+                    rs.getDouble("DonGia"),
+                    rs.getDouble("ThanhTien")
+                );
+                list.add(ct);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void insert(ChiTietPhieuNhap ct) {
+       
+        try (Connection conn = Myconnections.getConnection()) {
+             String sql = "INSERT INTO ChiTietPhieuNhap (MaPN, MaSP, SoLuong, DonGia, ThanhTien) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, ct.getMaPN());
+            stmt.setInt(2, ct.getMaSP());
+            stmt.setInt(3, ct.getSoLuong());
+            stmt.setDouble(4, ct.getDonGia());
+            stmt.setDouble(5, ct.getThanhTien());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(ChiTietPhieuNhap ct) {
+        
+        try (Connection conn = Myconnections.getConnection()) {
+            String sql = "UPDATE ChiTietPhieuNhap SET SoLuong = ?, DonGia = ?, ThanhTien = ? WHERE MaPN = ? AND MaSP = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, ct.getSoLuong());
+            stmt.setDouble(2, ct.getDonGia());
+            stmt.setDouble(3, ct.getThanhTien());
+            stmt.setInt(4, ct.getMaPN());
+            stmt.setInt(5, ct.getMaSP());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(int maPN, int maSP) {
+        
+        try (Connection conn = Myconnections.getConnection()) {
+            String sql = "DELETE FROM ChiTietPhieuNhap WHERE MaPN = ? AND MaSP = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, maPN);
+            stmt.setInt(2, maSP);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
