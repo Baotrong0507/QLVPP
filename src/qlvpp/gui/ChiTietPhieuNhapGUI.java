@@ -19,7 +19,7 @@ public class ChiTietPhieuNhapGUI extends JFrame {
         setSize(600, 400);
         setLocationRelativeTo(null);
 
-        model = new DefaultTableModel(new Object[]{"Mã SP", "Số lượng", "Đơn giá", "Thành tiền"}, 0);
+        model = new DefaultTableModel(new Object[]{"Mã SP", "Số lượng", "Giá Nhập", "Thành tiền"}, 0);
         table = new JTable(model);
         add(new JScrollPane(table), BorderLayout.CENTER);
 

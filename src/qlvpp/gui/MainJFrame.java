@@ -2,6 +2,7 @@ package qlvpp.gui;
 
 import java.awt.*;
 import javax.swing.*;
+import qlvpp.login.LoginGUI;
 
 public class MainJFrame extends JFrame {
 
@@ -17,6 +18,8 @@ public class MainJFrame extends JFrame {
     private JButton btnSanPham;
     private JButton btnKhuyenMai;
     private JButton btnHoaDon;
+    private JButton btnThongKe;
+    private JButton btnDangXuat;
 
     public MainJFrame() {
         initComponents();
@@ -31,7 +34,7 @@ public class MainJFrame extends JFrame {
 
         // ------------------ Sidebar Menu ------------------
         sidebarPanel = new JPanel();
-        sidebarPanel.setLayout(new GridLayout(10, 1, 0, 10));
+        sidebarPanel.setLayout(new GridLayout(12, 1, 0, 10));
         sidebarPanel.setPreferredSize(new Dimension(220, 0));
         sidebarPanel.setBackground(new Color(30, 30, 60));
 
@@ -44,6 +47,8 @@ public class MainJFrame extends JFrame {
         btnSanPham = createSidebarButton("Sản Phẩm", "src/qlvpp/images/product.png");
         btnKhuyenMai = createSidebarButton("Chương Trình Khuyến Mãi", "src/qlvpp/images/promo.png");
         btnHoaDon = createSidebarButton("Hóa Đơn", "src/qlvpp/images/invoice.png");
+        btnThongKe = createSidebarButton("Thống kê", "src/qlvpp/images/monitoring.png");
+        btnDangXuat = createSidebarButton("Đăng xuất", "src/qlvpp/images/logout.png");
 
         // ------------------ Thêm nút vào sidebar ------------------
         sidebarPanel.add(btnTrangChu);
@@ -54,6 +59,8 @@ public class MainJFrame extends JFrame {
         sidebarPanel.add(btnSanPham);
         sidebarPanel.add(btnKhuyenMai);
         sidebarPanel.add(btnHoaDon);
+        sidebarPanel.add(btnThongKe);
+        sidebarPanel.add(btnDangXuat);
 
         // ------------------ Content Panel ------------------
         contentPanel = new JPanel();
@@ -72,7 +79,7 @@ public class MainJFrame extends JFrame {
         add(contentPanel, BorderLayout.CENTER);
 
         // ------------------ Thêm ActionListener ------------------
-        btnTrangChu.addActionListener(e -> switchPanel(new TrangChuGUI()));
+        btnTrangChu.addActionListener(e -> switchPanel(new TrangChuGUI(this)));
         btnNhaCungCap.addActionListener(e -> switchPanel(new NhaCungCapGUI()));
         btnPhieuNhap.addActionListener(e -> switchPanel(new PhieuNhapGUI()));
         //btnNhanVien.addActionListener(e -> switchPanel(new NhanVienGUI()));
@@ -80,11 +87,26 @@ public class MainJFrame extends JFrame {
         //btnSanPham.addActionListener(e -> switchPanel(new SanPhamGUI()));
         //btnKhuyenMai.addActionListener(e -> switchPanel(new KhuyenMaiGUI()));
         //btnHoaDon.addActionListener(e -> switchPanel(new HoaDonGUI()));
+        btnThongKe.addActionListener(e -> switchPanel(new ThongKeGUI()));
+        btnDangXuat.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "Bạn có chắc muốn đăng xuất?", 
+                "Xác nhận đăng xuất", 
+                JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                dispose();
+                new LoginGUI().setVisible(true);
+            }
+        });
     }
 
     private JButton createSidebarButton(String text, String iconPath) {
         JButton button = new JButton(text);
-        button.setIcon(new ImageIcon(iconPath));
+        try {
+            button.setIcon(new ImageIcon(iconPath));
+        } catch (Exception e) {
+            System.err.println("Không thể tải biểu tượng: " + iconPath);
+        }
         button.setFocusPainted(false);
         button.setForeground(Color.WHITE);
         button.setBackground(new Color(45, 45, 80));
@@ -100,5 +122,14 @@ public class MainJFrame extends JFrame {
         contentPanel.add(panel, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
+    }
+
+    // Phương thức công khai để TrangChuGUI gọi
+    public void switchPanelFromChild(JPanel panel) {
+        switchPanel(panel);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new MainJFrame().setVisible(true));
     }
 }

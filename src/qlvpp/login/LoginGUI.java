@@ -55,7 +55,7 @@ public class LoginGUI extends JFrame {
         btnLogin.setBounds(60, 150, 100, 30);
         panel.add(btnLogin);
 
-        JButton btnExit = new JButton("Exist");
+        JButton btnExit = new JButton("Exit");
         btnExit.setBounds(175, 150, 100, 30);
         panel.add(btnExit);
         // Xử lý đăng nhập

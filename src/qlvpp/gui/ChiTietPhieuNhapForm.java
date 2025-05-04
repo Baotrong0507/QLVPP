@@ -1,5 +1,6 @@
 package qlvpp.gui;
 
+import qlvpp.dao.PhieuNhapDAO;
 import qlvpp.model.PhieuNhap;
 import qlvpp.model.ChiTietPhieuNhap;
 
@@ -47,11 +48,11 @@ public class ChiTietPhieuNhapForm extends JDialog {
 
         add(infoPanel, BorderLayout.NORTH);
 
-        String[] columnNames = {"Mã SP", "Số lượng", "Đơn giá", "Thành tiền"};
+        String[] columnNames = {"Mã SP", "Số lượng", "Giá Nhập", "Thành tiền"};
         model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int col) {
-                return col != 3; // chỉ không cho sửa "Thành tiền"
+                return col != 3; // Chỉ không cho sửa "Thành tiền"
             }
         };
 
@@ -77,57 +78,84 @@ public class ChiTietPhieuNhapForm extends JDialog {
             if (row >= 0) {
                 model.removeRow(row);
                 tinhTongTien();
+            } else {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng để xóa!");
             }
         });
 
-        // Cập nhật thành tiền khi sửa số lượng hoặc đơn giá
-model.addTableModelListener(e -> {
-    int row = e.getFirstRow();
-    if (row >= 0 && model.getRowCount() > row) {
-        try {
-            int soLuong = Integer.parseInt(model.getValueAt(row, 1).toString());
-            double donGia = Double.parseDouble(model.getValueAt(row, 2).toString());
-            double thanhTien = soLuong * donGia;
-
-            Object oldValue = model.getValueAt(row, 3);
-            if (oldValue == null || !(oldValue instanceof Number) || ((Number) oldValue).doubleValue() != thanhTien) {
-                model.setValueAt(thanhTien, row, 3);
+        // Cập nhật thành tiền khi sửa số lượng hoặc giá nhập
+        model.addTableModelListener(e -> {
+            int row = e.getFirstRow();
+            int column = e.getColumn(); // Lấy cột được chỉnh sửa
+            if (row >= 0 && model.getRowCount() > row && (column == 1 || column == 2)) { // Chỉ xử lý cột Số lượng hoặc Giá Nhập
+                try {
+                    String soLuongStr = model.getValueAt(row, 1).toString();
+                    String giaNhapStr = model.getValueAt(row, 2).toString();
+                    if (!soLuongStr.isEmpty() && !giaNhapStr.isEmpty()) {
+                        int soLuong = Integer.parseInt(soLuongStr);
+                        double giaNhap = Double.parseDouble(giaNhapStr);
+                        double thanhTien = soLuong * giaNhap;
+                        model.setValueAt(thanhTien, row, 3);
+                    } else {
+                        model.setValueAt(0.0, row, 3);
+                    }
+                    tinhTongTien();
+                } catch (NumberFormatException ex) {
+                    model.setValueAt(0.0, row, 3);
+                    tinhTongTien();
+                }
             }
-
-            tinhTongTien();
-        } catch (Exception ex) {
-            Object oldValue = model.getValueAt(row, 3);
-            if (oldValue == null || !(oldValue instanceof Number) || ((Number) oldValue).doubleValue() != 0.0) {
-                model.setValueAt(0.0, row, 3);
-            }
-            tinhTongTien();
-        }
-    }
-});
-
+        });
 
         btnLuu.addActionListener(e -> {
+            // Kiểm tra bảng có dữ liệu không
+            if (model.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(this, "Bảng chi tiết phiếu nhập trống! Vui lòng thêm ít nhất một dòng.");
+                return;
+            }
+
             try {
+                // Lấy dữ liệu phiếu nhập
                 int maPN = Integer.parseInt(txtMaPN.getText());
                 int maNV = Integer.parseInt(txtMaNV.getText());
                 int maNCC = Integer.parseInt(txtMaNCC.getText());
                 Date ngayNhap = Date.valueOf(txtNgayNhap.getText());
                 double tongTien = Double.parseDouble(txtTongTien.getText());
 
-                phieuNhap = new PhieuNhap(maPN, maNV, maNCC, ngayNhap, tongTien);
-
+                // Kiểm tra dữ liệu chi tiết
                 chiTietList.clear();
                 for (int i = 0; i < model.getRowCount(); i++) {
-                    int maSP = Integer.parseInt(model.getValueAt(i, 0).toString());
-                    int soLuong = Integer.parseInt(model.getValueAt(i, 1).toString());
-                    double donGia = Double.parseDouble(model.getValueAt(i, 2).toString());
-                    double thanhTien = Double.parseDouble(model.getValueAt(i, 3).toString());
-                    chiTietList.add(new ChiTietPhieuNhap(maPN, maSP, soLuong, donGia, thanhTien));
+                    String maSPStr = model.getValueAt(i, 0).toString();
+                    String soLuongStr = model.getValueAt(i, 1).toString();
+                    String giaNhapStr = model.getValueAt(i, 2).toString();
+                    String thanhTienStr = model.getValueAt(i, 3).toString();
+
+                    if (maSPStr.isEmpty() || soLuongStr.isEmpty() || giaNhapStr.isEmpty()) {
+                        throw new IllegalArgumentException("Dòng " + (i + 1) + ": Vui lòng nhập đầy đủ Mã SP, Số lượng, Giá Nhập.");
+                    }
+
+                    int maSP = Integer.parseInt(maSPStr);
+                    int soLuong = Integer.parseInt(soLuongStr);
+                    double giaNhap = Double.parseDouble(giaNhapStr);
+                    double thanhTien = Double.parseDouble(thanhTienStr);
+
+                    chiTietList.add(new ChiTietPhieuNhap(maPN, maSP, soLuong, giaNhap, thanhTien));
                 }
 
+                // Tạo đối tượng PhieuNhap
+                phieuNhap = new PhieuNhap(maPN, maNV, maNCC, ngayNhap, tongTien);
+
+                // Lưu vào cơ sở dữ liệu
+                PhieuNhapDAO dao = new PhieuNhapDAO();
+                dao.savePhieuNhap(phieuNhap, chiTietList);
+                JOptionPane.showMessageDialog(this, "Lưu thành công!");
                 dispose();
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            } catch (RuntimeException ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi lưu vào cơ sở dữ liệu: " + ex.getMessage());
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Lỗi định dạng dữ liệu!\n" + ex.getMessage());
+                JOptionPane.showMessageDialog(this, "Lỗi định dạng dữ liệu: " + ex.getMessage());
             }
         });
     }
@@ -145,7 +173,8 @@ model.addTableModelListener(e -> {
         for (int i = 0; i < model.getRowCount(); i++) {
             try {
                 tong += Double.parseDouble(model.getValueAt(i, 3).toString());
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         txtTongTien.setText(String.valueOf(tong));
     }
