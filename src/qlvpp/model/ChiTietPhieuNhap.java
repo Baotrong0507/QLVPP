@@ -4,15 +4,15 @@ public class ChiTietPhieuNhap {
     private int maPN; 
     private int maSP; 
     private int soLuong; 
-    private double donGia; 
+    private double GiaNhap; 
     private double thanhTien;
 
 public ChiTietPhieuNhap() {} 
-public ChiTietPhieuNhap(int maPN, int maSP, int soLuong, double donGia, double thanhTien) { 
+public ChiTietPhieuNhap(int maPN, int maSP, int soLuong, double GiaNhap, double thanhTien) { 
     this.maPN = maPN; 
     this.maSP = maSP; 
     this.soLuong = soLuong; 
-    this.donGia = donGia; 
+    this.GiaNhap = GiaNhap; 
     this.thanhTien = thanhTien; 
 } 
 public int getMaPN() { 
@@ -31,11 +31,11 @@ public int getSoLuong() {
 public void setSoLuong(int soLuong) { 
     this.soLuong = soLuong; 
 } 
-public double getDonGia() { 
-    return donGia; 
+public double getGiaNhap() { 
+    return GiaNhap; 
 }
-public void setDonGia(double donGia) {
-    this.donGia = donGia; 
+public void setGiaNhap(double GiaNhap) {
+    this.GiaNhap = GiaNhap; 
 }
 public double getThanhTien() {
     return thanhTien; 

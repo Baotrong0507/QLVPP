@@ -17,7 +17,7 @@ public class ChiTietPhieuNhapDAO {
                     rs.getInt("MaPN"),
                     rs.getInt("MaSP"),
                     rs.getInt("SoLuong"),
-                    rs.getDouble("DonGia"),
+                    rs.getDouble("GiaNhap"),
                     rs.getDouble("ThanhTien")
                 );
                 list.add(ct);
@@ -31,12 +31,12 @@ public class ChiTietPhieuNhapDAO {
     public void insert(ChiTietPhieuNhap ct) {
        
         try (Connection conn = Myconnections.getConnection()) {
-             String sql = "INSERT INTO ChiTietPhieuNhap (MaPN, MaSP, SoLuong, DonGia, ThanhTien) VALUES (?, ?, ?, ?, ?)";
+             String sql = "INSERT INTO ChiTietPhieuNhap (MaPN, MaSP, SoLuong, GiaNhap, ThanhTien) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, ct.getMaPN());
             stmt.setInt(2, ct.getMaSP());
             stmt.setInt(3, ct.getSoLuong());
-            stmt.setDouble(4, ct.getDonGia());
+            stmt.setDouble(4, ct.getGiaNhap());
             stmt.setDouble(5, ct.getThanhTien());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -47,10 +47,10 @@ public class ChiTietPhieuNhapDAO {
     public void update(ChiTietPhieuNhap ct) {
         
         try (Connection conn = Myconnections.getConnection()) {
-            String sql = "UPDATE ChiTietPhieuNhap SET SoLuong = ?, DonGia = ?, ThanhTien = ? WHERE MaPN = ? AND MaSP = ?";
+            String sql = "UPDATE ChiTietPhieuNhap SET SoLuong = ?, GiaNhap = ?, ThanhTien = ? WHERE MaPN = ? AND MaSP = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, ct.getSoLuong());
-            stmt.setDouble(2, ct.getDonGia());
+            stmt.setDouble(2, ct.getGiaNhap());
             stmt.setDouble(3, ct.getThanhTien());
             stmt.setInt(4, ct.getMaPN());
             stmt.setInt(5, ct.getMaSP());

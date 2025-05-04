@@ -34,7 +34,7 @@ public class ChiTietPhieuNhapGUI extends JFrame {
             model.addRow(new Object[]{
                 ct.getMaSP(),
                 ct.getSoLuong(),
-                ct.getDonGia(),
+                ct.getGiaNhap(),
                 ct.getThanhTien()
             });
         }
