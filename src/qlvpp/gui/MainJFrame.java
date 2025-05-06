@@ -1,7 +1,7 @@
 package qlvpp.gui;
 
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 import qlvpp.login.LoginGUI;
 
 public class MainJFrame extends JFrame {
@@ -32,13 +32,13 @@ public class MainJFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // ------------------ Sidebar Menu ------------------
+        // ------------------ Sidebar ------------------
         sidebarPanel = new JPanel();
         sidebarPanel.setLayout(new GridLayout(12, 1, 0, 10));
         sidebarPanel.setPreferredSize(new Dimension(220, 0));
         sidebarPanel.setBackground(new Color(30, 30, 60));
 
-        // ------------------ Tạo nút menu ------------------
+        // ------------------ Buttons ------------------
         btnTrangChu = createSidebarButton("Trang chủ", "src/qlvpp/images/home.png");
         btnNhaCungCap = createSidebarButton("Nhà Cung Cấp", "src/qlvpp/images/supplier.png");
         btnPhieuNhap = createSidebarButton("Phiếu Nhập", "src/qlvpp/images/import.png");
@@ -50,7 +50,7 @@ public class MainJFrame extends JFrame {
         btnThongKe = createSidebarButton("Thống kê", "src/qlvpp/images/monitoring.png");
         btnDangXuat = createSidebarButton("Đăng xuất", "src/qlvpp/images/logout.png");
 
-        // ------------------ Thêm nút vào sidebar ------------------
+        // ------------------ Add buttons to sidebar ------------------
         sidebarPanel.add(btnTrangChu);
         sidebarPanel.add(btnNhaCungCap);
         sidebarPanel.add(btnPhieuNhap);
@@ -78,26 +78,29 @@ public class MainJFrame extends JFrame {
         add(sidebarPanel, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);
 
-        // ------------------ Thêm ActionListener ------------------
-        btnTrangChu.addActionListener(e -> switchPanel(new TrangChuGUI(this)));
+        // ------------------ ActionListeners ------------------
+        btnTrangChu.addActionListener(e -> switchPanel(createTrangChuPanel()));
         btnNhaCungCap.addActionListener(e -> switchPanel(new NhaCungCapGUI()));
         btnPhieuNhap.addActionListener(e -> switchPanel(new PhieuNhapGUI()));
-        //btnNhanVien.addActionListener(e -> switchPanel(new NhanVienGUI()));
-        //btnKhachHang.addActionListener(e -> switchPanel(new KhachHangGUI()));
-        //btnSanPham.addActionListener(e -> switchPanel(new SanPhamGUI()));
-        //btnKhuyenMai.addActionListener(e -> switchPanel(new KhuyenMaiGUI()));
-        //btnHoaDon.addActionListener(e -> switchPanel(new HoaDonGUI()));
+        // btnNhanVien.addActionListener(e -> switchPanel(new NhanVienGUI()));
+        // btnKhachHang.addActionListener(e -> switchPanel(new KhachHangGUI()));
+        // btnSanPham.addActionListener(e -> switchPanel(new SanPhamGUI()));
+        // btnKhuyenMai.addActionListener(e -> switchPanel(new KhuyenMaiGUI()));
+        // btnHoaDon.addActionListener(e -> switchPanel(new HoaDonGUI()));
         btnThongKe.addActionListener(e -> switchPanel(new ThongKeGUI()));
         btnDangXuat.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(this, 
-                "Bạn có chắc muốn đăng xuất?", 
-                "Xác nhận đăng xuất", 
-                JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Bạn có chắc muốn đăng xuất?",
+                    "Xác nhận đăng xuất",
+                    JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 dispose();
                 new LoginGUI().setVisible(true);
             }
         });
+
+        // Hiển thị Trang chủ mặc định
+        switchPanel(createTrangChuPanel());
     }
 
     private JButton createSidebarButton(String text, String iconPath) {
@@ -124,12 +127,50 @@ public class MainJFrame extends JFrame {
         contentPanel.repaint();
     }
 
-    // Phương thức công khai để TrangChuGUI gọi
-    public void switchPanelFromChild(JPanel panel) {
-        switchPanel(panel);
+    // Giao diện Trang chủ được gộp vào đây
+    private JPanel createTrangChuPanel() {
+        JPanel trangChuPanel = new JPanel(new BorderLayout());
+        trangChuPanel.setBackground(Color.WHITE);
+        trangChuPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        buttonPanel.setBackground(Color.WHITE);
+
+        // Nút Thống kê
+        JButton btnThongKeNoi = new JButton("Thống kê");
+        btnThongKeNoi.setIcon(new ImageIcon("src/qlvpp/images/piechart.png"));
+        btnThongKeNoi.setBackground(new Color(0, 120, 215));
+        btnThongKeNoi.setForeground(Color.WHITE);
+        btnThongKeNoi.setFocusPainted(false);
+        btnThongKeNoi.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnThongKeNoi.setHorizontalAlignment(SwingConstants.LEFT);
+        btnThongKeNoi.setIconTextGap(10);
+        btnThongKeNoi.addActionListener(e -> switchPanel(new ThongKeGUI()));
+        buttonPanel.add(btnThongKeNoi);
+
+        // Các nút chưa triển khai
+        for (int i = 0; i < 3; i++) {
+            JButton btnPlaceholder = new JButton("Chưa triển khai");
+            btnPlaceholder.setBackground(new Color(100, 100, 100));
+            btnPlaceholder.setForeground(Color.WHITE);
+            btnPlaceholder.setFocusPainted(false);
+            btnPlaceholder.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            btnPlaceholder.setHorizontalAlignment(SwingConstants.LEFT);
+            btnPlaceholder.setIconTextGap(10);
+            buttonPanel.add(btnPlaceholder);
+        }
+
+        trangChuPanel.add(buttonPanel, BorderLayout.NORTH);
+
+        JLabel lblIllustration = new JLabel("", SwingConstants.CENTER);
+        lblIllustration.setIcon(new ImageIcon("src/qlvpp/images/home_illustration.png"));
+        trangChuPanel.add(lblIllustration, BorderLayout.CENTER);
+
+        return trangChuPanel;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainJFrame().setVisible(true));
+    // Phương thức công khai nếu cần chuyển panel từ lớp khác
+    public void switchPanelFromChild(JPanel panel) {
+        switchPanel(panel);
     }
 }
