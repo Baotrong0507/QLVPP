@@ -4,19 +4,10 @@ import qlvpp.model.NhanVien;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import qlvpp.connections.Myconnections;
 
 public class NhanVienDAO {
     private Connection conn;
-
-    public NhanVienDAO() {
-        // Initialize database connection
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/QuanLyVanPhongPham", "username", "password");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public List<NhanVien> getAllNhanVien() {
         List<NhanVien> nhanVienList = new ArrayList<>();
         String sql = "SELECT * FROM NhanVien";

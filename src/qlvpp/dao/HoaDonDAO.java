@@ -4,19 +4,9 @@ import qlvpp.model.HoaDon;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import qlvpp.connections.Myconnections;
 public class HoaDonDAO {
     private Connection conn;
-
-    public HoaDonDAO() {
-        // Initialize database connection
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/QuanLyVanPhongPham", "username", "password");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public List<HoaDon> getAllHoaDon() {
         List<HoaDon> hoaDonList = new ArrayList<>();
         String sql = "SELECT * FROM HoaDon";

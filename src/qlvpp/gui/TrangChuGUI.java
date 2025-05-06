@@ -1,3 +1,4 @@
+/*
 package qlvpp.gui;
 
      import javax.swing.*;
@@ -71,3 +72,4 @@ package qlvpp.gui;
              add(lblIllustration, BorderLayout.CENTER);
          }
      }
+*/

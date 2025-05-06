@@ -4,18 +4,10 @@ import qlvpp.model.KhachHang;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import qlvpp.connections.Myconnections;
 public class KhachHangDAO {
     private Connection conn;
 
-    public KhachHangDAO() {
-        // Initialize database connection
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/QuanLyVanPhongPham", "username", "password");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public List<KhachHang> getAllKhachHang() {
         List<KhachHang> khachHangList = new ArrayList<>();
