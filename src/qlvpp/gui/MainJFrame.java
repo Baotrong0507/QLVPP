@@ -133,7 +133,7 @@ public class MainJFrame extends JFrame {
         trangChuPanel.setBackground(Color.WHITE);
         trangChuPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 10, 10)); // Cập nhật thành 2 hàng, 3 cột
         buttonPanel.setBackground(Color.WHITE);
 
         // Nút Thống kê
@@ -142,23 +142,65 @@ public class MainJFrame extends JFrame {
         btnThongKeNoi.setBackground(new Color(0, 120, 215));
         btnThongKeNoi.setForeground(Color.WHITE);
         btnThongKeNoi.setFocusPainted(false);
-        btnThongKeNoi.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnThongKeNoi.setFont(new Font("Segoe UI", Font.PLAIN, 16));    
         btnThongKeNoi.setHorizontalAlignment(SwingConstants.LEFT);
         btnThongKeNoi.setIconTextGap(10);
         btnThongKeNoi.addActionListener(e -> switchPanel(new ThongKeGUI()));
         buttonPanel.add(btnThongKeNoi);
 
-        // Các nút chưa triển khai
-        for (int i = 0; i < 3; i++) {
-            JButton btnPlaceholder = new JButton("Chưa triển khai");
-            btnPlaceholder.setBackground(new Color(100, 100, 100));
-            btnPlaceholder.setForeground(Color.WHITE);
-            btnPlaceholder.setFocusPainted(false);
-            btnPlaceholder.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            btnPlaceholder.setHorizontalAlignment(SwingConstants.LEFT);
-            btnPlaceholder.setIconTextGap(10);
-            buttonPanel.add(btnPlaceholder);
-        }
+        // Nút Xử lý Excel
+        JButton btnExcelNoi = new JButton("Xử lý Excel");
+        btnExcelNoi.setIcon(new ImageIcon("src/qlvpp/images/excel.png"));
+        btnExcelNoi.setBackground(new Color(0, 120, 215));
+        btnExcelNoi.setForeground(Color.WHITE);
+        btnExcelNoi.setFocusPainted(false);
+        btnExcelNoi.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnExcelNoi.setHorizontalAlignment(SwingConstants.LEFT);
+        btnExcelNoi.setIconTextGap(10);
+        btnExcelNoi.addActionListener(e -> switchPanel(new ExcelGUI()));
+        buttonPanel.add(btnExcelNoi);
+
+        // Nút Xuất file PDF
+        JButton btnExportPDF = new JButton("Xuất file PDF");
+        btnExportPDF.setIcon(new ImageIcon("src/qlvpp/images/pdf.png"));
+        btnExportPDF.setBackground(new Color(0, 120, 215));
+        btnExportPDF.setForeground(Color.WHITE);
+        btnExportPDF.setFocusPainted(false);
+        btnExportPDF.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnExportPDF.setHorizontalAlignment(SwingConstants.LEFT);
+        btnExportPDF.setIconTextGap(10);
+        btnExportPDF.addActionListener(e -> switchPanel(new ExportPDFGUI()));
+        buttonPanel.add(btnExportPDF);
+
+        // Nút phụ 1 (placeholder)
+        JButton btnPlaceholder1 = new JButton("Chưa triển khai");
+        btnPlaceholder1.setBackground(new Color(100, 100, 100));
+        btnPlaceholder1.setForeground(Color.WHITE);
+        btnPlaceholder1.setFocusPainted(false);
+        btnPlaceholder1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnPlaceholder1.setHorizontalAlignment(SwingConstants.LEFT);
+        btnPlaceholder1.setIconTextGap(10);
+        buttonPanel.add(btnPlaceholder1);
+
+        // Nút phụ 2 (placeholder)
+        JButton btnPlaceholder2 = new JButton("Chưa triển khai");
+        btnPlaceholder2.setBackground(new Color(100, 100, 100));
+        btnPlaceholder2.setForeground(Color.WHITE);
+        btnPlaceholder2.setFocusPainted(false);
+        btnPlaceholder2.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnPlaceholder2.setHorizontalAlignment(SwingConstants.LEFT);
+        btnPlaceholder2.setIconTextGap(10);
+        buttonPanel.add(btnPlaceholder2);
+
+        // Nút phụ 3 (placeholder)
+        JButton btnPlaceholder3 = new JButton("Chưa triển khai");
+        btnPlaceholder3.setBackground(new Color(100, 100, 100));
+        btnPlaceholder3.setForeground(Color.WHITE);
+        btnPlaceholder3.setFocusPainted(false);
+        btnPlaceholder3.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnPlaceholder3.setHorizontalAlignment(SwingConstants.LEFT);
+        btnPlaceholder3.setIconTextGap(10);
+        buttonPanel.add(btnPlaceholder3);
 
         trangChuPanel.add(buttonPanel, BorderLayout.NORTH);
 
