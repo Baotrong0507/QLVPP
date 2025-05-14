@@ -21,6 +21,9 @@ import qlvpp.model.ChiTietPhieuNhap;
 import qlvpp.model.NhaCungCap;
 import qlvpp.model.PhieuNhap;
 import java.sql.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public class ExcelGUI extends JPanel {
 
@@ -61,7 +64,13 @@ public class ExcelGUI extends JPanel {
         btnPreview.setBackground(new java.awt.Color(0, 120, 215));
         btnPreview.setForeground(new java.awt.Color(255, 255, 255));
         btnPreview.setFocusPainted(false);
-        btnPreview.addActionListener(e -> previewData());
+        btnPreview.addActionListener(e -> {
+            try {
+                previewData();
+            } catch (InvalidFormatException ex) {
+                Logger.getLogger(ExcelGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         inputPanel.add(btnPreview);
 
         JButton btnLoad = new JButton("Tải Dữ Liệu");
@@ -110,7 +119,7 @@ public class ExcelGUI extends JPanel {
     }
 
     // Đọc và hiển thị dữ liệu từ file Excel
-    private void previewData() {
+    private void previewData() throws InvalidFormatException {
         String fileName = new File(txtFileName.getText().trim()).getName();
         String tableName = fileName.substring(0, fileName.lastIndexOf(".")).toLowerCase();
         if (!tableName.equals("nhacungcap") && !tableName.equals("phieunhap") && !tableName.equals("chitietphieunhap")) {

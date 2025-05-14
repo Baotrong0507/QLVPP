@@ -82,11 +82,11 @@ public class MainJFrame extends JFrame {
         btnTrangChu.addActionListener(e -> switchPanel(createTrangChuPanel()));
         btnNhaCungCap.addActionListener(e -> switchPanel(new NhaCungCapGUI()));
         btnPhieuNhap.addActionListener(e -> switchPanel(new PhieuNhapGUI()));
-        // btnNhanVien.addActionListener(e -> switchPanel(new NhanVienGUI()));
-        // btnKhachHang.addActionListener(e -> switchPanel(new KhachHangGUI()));
+        btnNhanVien.addActionListener(e -> switchPanel(new NhanVienGUI()));
+        btnKhachHang.addActionListener(e -> switchPanel(new KhachHangGUI()));
         // btnSanPham.addActionListener(e -> switchPanel(new SanPhamGUI()));
-        // btnKhuyenMai.addActionListener(e -> switchPanel(new KhuyenMaiGUI()));
-        // btnHoaDon.addActionListener(e -> switchPanel(new HoaDonGUI()));
+        btnKhuyenMai.addActionListener(e -> switchPanel(new KhuyenMaiGUI()));
+        btnHoaDon.addActionListener(e -> switchPanel(new HoaDonGUI()));
         btnThongKe.addActionListener(e -> switchPanel(new ThongKeGUI()));
         btnDangXuat.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(this,

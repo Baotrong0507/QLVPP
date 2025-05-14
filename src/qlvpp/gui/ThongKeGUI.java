@@ -198,7 +198,7 @@ public class ThongKeGUI extends JPanel {
             }
         }
 
-        JFreeChart barChart = ChartFactory.createBarChart(
+        /*JFreeChart barChart = ChartFactory.createBarChart(
             "Biểu đồ Thống kê Chi tiêu Theo Tháng",
             "Thời gian",
             "Số tiền (VNĐ)",
@@ -207,6 +207,7 @@ public class ThongKeGUI extends JPanel {
 
         ChartPanel chartPanel = new ChartPanel(barChart);
         chartPanel.setPreferredSize(new Dimension(500, 300));
-        return chartPanel;
+        return chartPanel;*/
+        return null;
     }
 }
