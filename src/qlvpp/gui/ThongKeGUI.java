@@ -14,6 +14,7 @@ import java.util.Map;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import qlvpp.bus.PhieuNhapBUS;
 import qlvpp.bus.HoaDonBUS;
@@ -192,10 +193,14 @@ public class ThongKeGUI extends JPanel {
         }
 
         JFreeChart barChart = ChartFactory.createBarChart(
-            "Biểu đồ Thống kê Doanh thu và Chi tiêu Theo Tháng",
-            "Thời gian",
-            "Số tiền (VNĐ)",
-            dataset
+                "Thống kê doanh thu",              // Tiêu đề
+                "Tháng",                           // Trục X
+                "Doanh thu",                       // Trục Y
+                dataset,                           // Dữ liệu
+                PlotOrientation.VERTICAL,          // Hướng biểu đồ
+                true,                              // Hiển thị chú thích
+                true,                              // Hiển thị gợi ý
+                false                              // Không cần URL
         );
 
         ChartPanel chartPanel = new ChartPanel(barChart);

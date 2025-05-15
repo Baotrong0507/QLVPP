@@ -1,4 +1,3 @@
-
 package qlvpp.connections;
 
 import java.sql.Connection;
@@ -7,18 +6,19 @@ import java.sql.SQLException;
 
 public class Myconnections {
 
-    private static final String URL = "jdbc:sqlserver://LAPTOP-SFT9PC70:1433;databaseName=QuanLyVanPhongPham;encrypt=true;trustServerCertificate=true;";
-    private static final String USERNAME = "sa";
-    private static final String PASSWORD = "123456789";
+    private static final String URL = "jdbc:mysql://localhost:3306/quanlyvanphongpham?useSSL=false&serverTimezone=UTC";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "";
 
-    // Hàm static trả về Connection để tái sử dụng
     public static Connection getConnection() {
         Connection conn = null;
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            // Sử dụng driver cũ cho mysql-connector-java-5.1.48
+            Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace(); // có thể thay bằng JOptionPane.showMessageDialog nếu muốn thông báo GUI
+            e.printStackTrace();
+            System.err.println("Failed to connect to database: " + e.getMessage());
         }
         return conn;
     }

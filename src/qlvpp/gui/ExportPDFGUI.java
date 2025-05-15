@@ -96,7 +96,7 @@ public class ExportPDFGUI extends JPanel {
             // Xuất PDF dựa trên loại tài liệu
             if ("Hóa đơn".equals(documentType)) {
                 // Lấy dữ liệu hóa đơn từ HoaDonBUS
-                var hoaDonList = hoaDonBUS.searchHoaDon(maPN);
+                var hoaDonList = hoaDonBUS.timKiemHoaDon(maPN);
                 if (hoaDonList.isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn với mã: " + maPN, "Lỗi", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -110,6 +110,8 @@ public class ExportPDFGUI extends JPanel {
             JOptionPane.showMessageDialog(this, "Xuất PDF thành công! File: " + pdfFile.getAbsolutePath(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

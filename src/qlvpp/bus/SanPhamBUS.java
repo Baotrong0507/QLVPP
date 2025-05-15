@@ -1,6 +1,8 @@
 package qlvpp.bus;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import qlvpp.dao.SanPhamDAO;
 import qlvpp.model.SanPham;
 
@@ -9,7 +11,7 @@ public class SanPhamBUS {
     private SanPhamDAO dao = new SanPhamDAO();
 
     public SanPhamBUS() {
-        dssp = dao.getAll();
+        dssp = (ArrayList<SanPham>) dao.getAll();
     }
 
     public ArrayList<SanPham> getAll() {
@@ -62,5 +64,8 @@ public class SanPhamBUS {
             }
         }
         return kq;
+    }
+    public List<SanPham> danhsachsanpham(){
+        return dao.getAll();
     }
 }

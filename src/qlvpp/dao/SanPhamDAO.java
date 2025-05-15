@@ -2,12 +2,14 @@ package qlvpp.dao;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
+
 import qlvpp.model.SanPham;
 import qlvpp.connections.Myconnections;
 
 public class SanPhamDAO {
 
-    public ArrayList<SanPham> getAll() {
+    public List<SanPham> getAll() {
         ArrayList<SanPham> ds = new ArrayList<>();
         String sql = "SELECT * FROM SanPham";
         try (Connection con = Myconnections.getConnection();

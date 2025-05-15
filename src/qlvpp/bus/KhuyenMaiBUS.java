@@ -44,7 +44,7 @@ public class KhuyenMaiBUS {
     public List<SanPham> getAllSanPham() {
         return khuyenMaiDAO.getAllSanPham();
     }
-    
+
     public int getNextMaKM() {
     return khuyenMaiDAO.getNextMaKM();
 }

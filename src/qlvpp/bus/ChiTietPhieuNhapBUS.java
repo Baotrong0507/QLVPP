@@ -12,18 +12,6 @@ public class ChiTietPhieuNhapBUS {
     }
 
     public void add(ChiTietPhieuNhap ct) {
-        List<ChiTietPhieuNhap> dsCT = dao.getByMaPN(ct.getMaPN());
-
-        for (ChiTietPhieuNhap item : dsCT) {
-            if (item.getMaSP() == ct.getMaSP()) {
-                // Nếu đã tồn tại sản phẩm trong phiếu, cộng dồn số lượng
-                item.setSoLuong(item.getSoLuong() + ct.getSoLuong());
-                dao.update(item);
-                return;
-            }
-        }
-
-        // Nếu không trùng thì thêm mới
         dao.insert(ct);
     }
 

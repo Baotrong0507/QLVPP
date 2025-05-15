@@ -32,6 +32,7 @@ public class SanPhamGUI extends JPanel {
         topPanel.add(btnTaiLai);
         add(topPanel, BorderLayout.NORTH);
 
+        // 📋 Bảng sản phẩm
         model = new DefaultTableModel(new Object[]{
             "Mã SP", "Tên SP", "Số lượng", "Đơn giá", "Đơn vị", "Mã loại", "Xuất xứ"
         }, 0);
