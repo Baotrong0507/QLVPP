@@ -84,7 +84,7 @@ public class MainJFrame extends JFrame {
         btnPhieuNhap.addActionListener(e -> switchPanel(new PhieuNhapGUI()));
         btnNhanVien.addActionListener(e -> switchPanel(new NhanVienGUI()));
         btnKhachHang.addActionListener(e -> switchPanel(new KhachHangGUI()));
-        //btnSanPham.addActionListener(e -> switchPanel(new SanPhamGUI()));
+        btnSanPham.addActionListener(e -> switchPanel(new SanPhamGUI()));
         btnKhuyenMai.addActionListener(e -> switchPanel(new KhuyenMaiGUI()));
         btnHoaDon.addActionListener(e -> switchPanel(new HoaDonGUI()));
         btnThongKe.addActionListener(e -> switchPanel(new ThongKeGUI()));
