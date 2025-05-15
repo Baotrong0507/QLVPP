@@ -167,16 +167,4 @@ public class PhieuNhapBUS {
         System.out.println("Chi tiêu theo tháng: " + chiTieuTheoThang);
         return chiTieuTheoThang;
     }
-
-    // Ghi chú: Thêm phương thức tính doanh thu và lợi nhuận sau khi có HoaDonDAO
-    /*
-    public double tinhDoanhThu() {
-        // Lấy dữ liệu từ HoaDonDAO và tính tổng doanh thu
-        return 0.0;
-    }
-
-    public double tinhLoiNhuan() {
-        return tinhDoanhThu() - tinhChiTieu();
-    }
-    */
 }

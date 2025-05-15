@@ -7,9 +7,9 @@ import java.sql.SQLException;
 
 public class Myconnections {
 
-    private static final String URL = "jdbc:sqlserver://LAPTOP-IU1UF6TJ\\MSSQLSV:1433;databaseName=QuanLyVanPhongPham;encrypt=true;trustServerCertificate=true;";
+    private static final String URL = "jdbc:sqlserver://LAPTOP-SFT9PC70:1433;databaseName=QuanLyVanPhongPham;encrypt=true;trustServerCertificate=true;";
     private static final String USERNAME = "sa";
-    private static final String PASSWORD = "123456";
+    private static final String PASSWORD = "123456789";
 
     // Hàm static trả về Connection để tái sử dụng
     public static Connection getConnection() {

@@ -4,15 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import qlvpp.file.PDFExporter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import qlvpp.bus.HoaDonBUS;
+import qlvpp.model.HoaDon; // Thêm import cho HoaDon
 
 public class ExportPDFGUI extends JPanel {
 
     private JComboBox<String> cbDocumentType;
     private JTextField txtMaPN;
     private JButton btnExportPDF;
+    private HoaDonBUS hoaDonBUS; // Thêm để lấy dữ liệu hóa đơn
+    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"); // Định dạng thời gian
 
     public ExportPDFGUI() {
+        hoaDonBUS = new HoaDonBUS(); // Khởi tạo HoaDonBUS
         initComponents();
     }
 
@@ -47,7 +53,7 @@ public class ExportPDFGUI extends JPanel {
         inputPanel.add(cbDocumentType, gbc);
 
         // Nhập mã phiếu nhập
-        JLabel lblMaPN = new JLabel("Mã phiếu nhập:");
+        JLabel lblMaPN = new JLabel("Mã phiếu nhập/Hóa đơn:");
         gbc.gridx = 0;
         gbc.gridy = 1;
         inputPanel.add(lblMaPN, gbc);
@@ -76,12 +82,31 @@ public class ExportPDFGUI extends JPanel {
         String maPN = txtMaPN.getText().trim();
 
         if (maPN.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã phiếu nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã phiếu nhập hoặc hóa đơn!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        // Tạo tên file với thời gian hiện tại
+        String timestamp = LocalDateTime.now().format(timeFormatter); // Ví dụ: 20250515_100000
+        String fileName = "exports/" + documentType.replace(" ", "") + "_" + maPN + "_" + timestamp + ".pdf";
+        File pdfFile = new File(fileName); // Thư mục exports (tạo nếu chưa tồn tại)
+        pdfFile.getParentFile().mkdirs(); // Tạo thư mục nếu không tồn tại
+
         try {
-            File pdfFile = PDFExporter.exportPDF(documentType, maPN);
+            // Xuất PDF dựa trên loại tài liệu
+            if ("Hóa đơn".equals(documentType)) {
+                // Lấy dữ liệu hóa đơn từ HoaDonBUS
+                var hoaDonList = hoaDonBUS.searchHoaDon(maPN);
+                if (hoaDonList.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn với mã: " + maPN, "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                HoaDon hd = hoaDonList.get(0); // Lấy hóa đơn đầu tiên (giả sử mã duy nhất)
+                qlvpp.file.PDFExporter.exportPDF(documentType, maPN, hd); // Truyền thêm dữ liệu hóa đơn
+            } else {
+                qlvpp.file.PDFExporter.exportPDF(documentType, maPN); // Xử lý phiếu nhập
+            }
+
             JOptionPane.showMessageDialog(this, "Xuất PDF thành công! File: " + pdfFile.getAbsolutePath(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);

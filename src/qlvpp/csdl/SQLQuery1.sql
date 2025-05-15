@@ -5,7 +5,7 @@ CREATE TABLE KhachHang (
     Ho VARCHAR(50) NOT NULL,
     Ten VARCHAR(50) NOT NULL,
     DiaChi TEXT,
-    sdt VARCHAR(15) UNIQUE
+    dienThoai VARCHAR(15) UNIQUE
 );
 CREATE TABLE NhanVien (
     MaNV INT PRIMARY KEY ,

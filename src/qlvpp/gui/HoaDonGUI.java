@@ -3,6 +3,10 @@ package qlvpp.gui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import qlvpp.bus.HoaDonBUS;
 import qlvpp.model.HoaDon;
@@ -13,6 +17,7 @@ public class HoaDonGUI extends JPanel {
     private DefaultTableModel tableModel;
     private JTextField txtMaHD, txtMaKH, txtMaNV, txtNgayLap, txtTongTien;
     private JButton btnThem, btnSua, btnXoa, btnTimKiem;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public HoaDonGUI() {
         hoaDonBUS = new HoaDonBUS();
@@ -40,7 +45,7 @@ public class HoaDonGUI extends JPanel {
         txtMaNV = new JTextField();
         inputPanel.add(txtMaNV);
 
-        inputPanel.add(new JLabel("Ngày Lập (YYYY-MM-DD):"));
+        inputPanel.add(new JLabel("Ngày Lập (dd/MM/yyyy):"));
         txtNgayLap = new JTextField();
         inputPanel.add(txtNgayLap);
 
@@ -93,17 +98,29 @@ public class HoaDonGUI extends JPanel {
         tableModel.setRowCount(0);
         List<HoaDon> hoaDonList = hoaDonBUS.getAllHoaDon();
         for (HoaDon hd : hoaDonList) {
-            tableModel.addRow(new Object[]{hd.getMaHD(), hd.getMaKH(), hd.getMaNV(), hd.getNgayLap(), hd.getTongTien()});
+            // Chuyển java.sql.Date thành LocalDate để định dạng
+            LocalDate ngayLap = hd.getNgayLap().toLocalDate();
+            tableModel.addRow(new Object[]{
+                hd.getMaHD(),
+                hd.getMaKH(),
+                hd.getMaNV(),
+                ngayLap.format(formatter), // Định dạng ngày để hiển thị
+                hd.getTongTien()
+            });
         }
     }
 
     private void themHoaDon() {
         try {
+            // Parse chuỗi ngày thành LocalDate, sau đó chuyển thành java.sql.Date
+            LocalDate localDate = LocalDate.parse(txtNgayLap.getText(), formatter);
+            Date ngayLap = Date.valueOf(localDate);
+
             HoaDon hd = new HoaDon(
                 Integer.parseInt(txtMaHD.getText()),
                 Integer.parseInt(txtMaKH.getText()),
                 Integer.parseInt(txtMaNV.getText()),
-                txtNgayLap.getText(),
+                ngayLap,
                 Double.parseDouble(txtTongTien.getText())
             );
             if (hoaDonBUS.addHoaDon(hd)) {
@@ -113,6 +130,8 @@ public class HoaDonGUI extends JPanel {
             } else {
                 JOptionPane.showMessageDialog(this, "Thêm hóa đơn thất bại!");
             }
+        } catch (DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày theo định dạng dd/MM/yyyy!");
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số cho Mã HD, Mã KH, Mã NV và Tổng Tiền!");
         }
@@ -120,11 +139,15 @@ public class HoaDonGUI extends JPanel {
 
     private void suaHoaDon() {
         try {
+            // Parse chuỗi ngày thành LocalDate, sau đó chuyển thành java.sql.Date
+            LocalDate localDate = LocalDate.parse(txtNgayLap.getText(), formatter);
+            Date ngayLap = Date.valueOf(localDate);
+
             HoaDon hd = new HoaDon(
                 Integer.parseInt(txtMaHD.getText()),
                 Integer.parseInt(txtMaKH.getText()),
                 Integer.parseInt(txtMaNV.getText()),
-                txtNgayLap.getText(),
+                ngayLap,
                 Double.parseDouble(txtTongTien.getText())
             );
             if (hoaDonBUS.updateHoaDon(hd)) {
@@ -134,6 +157,8 @@ public class HoaDonGUI extends JPanel {
             } else {
                 JOptionPane.showMessageDialog(this, "Sửa hóa đơn thất bại!");
             }
+        } catch (DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày theo định dạng dd/MM/yyyy!");
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số cho Mã HD, Mã KH, Mã NV và Tổng Tiền!");
         }
@@ -159,7 +184,14 @@ public class HoaDonGUI extends JPanel {
         tableModel.setRowCount(0);
         List<HoaDon> hoaDonList = hoaDonBUS.searchHoaDon(search);
         for (HoaDon hd : hoaDonList) {
-            tableModel.addRow(new Object[]{hd.getMaHD(), hd.getMaKH(), hd.getMaNV(), hd.getNgayLap(), hd.getTongTien()});
+            LocalDate ngayLap = hd.getNgayLap().toLocalDate();
+            tableModel.addRow(new Object[]{
+                hd.getMaHD(),
+                hd.getMaKH(),
+                hd.getMaNV(),
+                ngayLap.format(formatter),
+                hd.getTongTien()
+            });
         }
     }
 
