@@ -1,101 +1,137 @@
 package qlvpp.dao;
 
+import qlvpp.connections.Myconnections;
 import qlvpp.model.HoaDon;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import qlvpp.connections.*;
 
 public class HoaDonDAO {
-    private Connection conn;
-
-    public HoaDonDAO() {
-    	conn = Myconnections.getConnection();
-    }
-    	
-
     public List<HoaDon> getAllHoaDon() {
-        List<HoaDon> hoaDonList = new ArrayList<>();
+        List<HoaDon> ds = new ArrayList<>();
         String sql = "SELECT * FROM HoaDon";
-        try (PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection con = Myconnections.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 HoaDon hd = new HoaDon(
-                    rs.getInt("MaHD"),
-                    rs.getInt("MaKH"),
-                    rs.getInt("MaNV"),
-                    rs.getString("NgayLap"),
-                    rs.getDouble("TongTien")
+                        rs.getInt("MaHD"), // Đổi sang int
+                        rs.getInt("MaKH"),
+                        rs.getInt("MaNV"),
+                        rs.getDate("NgayLap"),
+                        rs.getDouble("TongTien")
                 );
-                hoaDonList.add(hd);
+                ds.add(hd);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return hoaDonList;
+        return ds;
     }
 
     public boolean addHoaDon(HoaDon hd) {
         String sql = "INSERT INTO HoaDon (MaHD, MaKH, MaNV, NgayLap, TongTien) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, hd.getMaHD());
+        try (Connection con = Myconnections.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, hd.getMaHD()); // Đổi sang int
             ps.setInt(2, hd.getMaKH());
             ps.setInt(3, hd.getMaNV());
-            ps.setString(4, hd.getNgayLap());
+            ps.setDate(4, hd.getNgayLap());
             ps.setDouble(5, hd.getTongTien());
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
     public boolean updateHoaDon(HoaDon hd) {
-        String sql = "UPDATE HoaDon SET MaKH = ?, MaNV = ?, NgayLap = ?, TongTien = ? WHERE MaHD = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql = "UPDATE HoaDon SET MaKH=?, MaNV=?, NgayLap=?, TongTien=? WHERE MaHD=?";
+        try (Connection con = Myconnections.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, hd.getMaKH());
             ps.setInt(2, hd.getMaNV());
-            ps.setString(3, hd.getNgayLap());
+            ps.setDate(3, hd.getNgayLap());
             ps.setDouble(4, hd.getTongTien());
-            ps.setInt(5, hd.getMaHD());
+            ps.setInt(5, hd.getMaHD()); // Đổi sang int
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
-    public boolean deleteHoaDon(int maHD) {
-        String sql = "DELETE FROM HoaDon WHERE MaHD = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+    public boolean deleteHoaDon(int maHD) { // Đổi sang int
+        String sql = "DELETE FROM HoaDon WHERE MaHD=?";
+        try (Connection con = Myconnections.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, maHD);
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
     public List<HoaDon> searchHoaDon(String search) {
-        List<HoaDon> hoaDonList = new ArrayList<>();
-        String sql = "SELECT * FROM HoaDon WHERE MaHD LIKE ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, "%" + search + "%");
+        List<HoaDon> result = new ArrayList<>();
+        String sql = "SELECT * FROM HoaDon WHERE CAST(MaHD AS CHAR) LIKE ? OR CAST(MaKH AS CHAR) LIKE ? OR CAST(MaNV AS CHAR) LIKE ?";
+        try (Connection con = Myconnections.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            String likePattern = "%" + search + "%";
+            ps.setString(1, likePattern);
+            ps.setString(2, likePattern);
+            ps.setString(3, likePattern);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 HoaDon hd = new HoaDon(
-                    rs.getInt("MaHD"),
-                    rs.getInt("MaKH"),
-                    rs.getInt("MaNV"),
-                    rs.getString("NgayLap"),
-                    rs.getDouble("TongTien")
+                        rs.getInt("MaHD"), // Đổi sang int
+                        rs.getInt("MaKH"),
+                        rs.getInt("MaNV"),
+                        rs.getDate("NgayLap"),
+                        rs.getDouble("TongTien")
                 );
-                hoaDonList.add(hd);
+                result.add(hd);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return hoaDonList;
+        return result;
+    }
+
+    public int getMaxMaHD() { // Đổi kiểu trả về thành int
+        String sql = "SELECT MAX(MaHD) as maxMaHD FROM HoaDon";
+        try (Connection con = Myconnections.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("maxMaHD");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0; // Trả về 0 nếu không có dữ liệu
+    }
+
+    public HoaDon getHoaDonByMaHD(int maHD) { // Đổi sang int
+        String sql = "SELECT * FROM HoaDon WHERE MaHD = ?";
+        try (Connection con = Myconnections.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, maHD);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new HoaDon(
+                        rs.getInt("MaHD"), // Đổi sang int
+                        rs.getInt("MaKH"),
+                        rs.getInt("MaNV"),
+                        rs.getDate("NgayLap"),
+                        rs.getDouble("TongTien")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

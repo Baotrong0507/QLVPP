@@ -132,37 +132,4 @@ public class PhieuNhapDAO {
             }
         }
     }
-
-    public double tinhTongChiTieu() {
-        double tongChiTieu = 0;
-        try (Connection conn = Myconnections.getConnection()) {
-            String sql = "SELECT SUM(TongTien) AS tongChiTieu FROM PhieuNhap";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                tongChiTieu = rs.getDouble("tongChiTieu");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi tính tổng chi tiêu: " + e.getMessage(), e);
-        }
-        return tongChiTieu;
-    }
-
-    // Ghi chú: Thêm phương thức tính doanh thu sau khi có HoaDonDAO
-    /*
-    public double tinhTongDoanhThu() {
-        double tongDoanhThu = 0;
-        try (Connection conn = Myconnections.getConnection()) {
-            String sql = "SELECT SUM(TongTien) AS tongDoanhThu FROM HoaDon";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                tongDoanhThu = rs.getDouble("tongDoanhThu");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi tính tổng doanh thu: " + e.getMessage(), e);
-        }
-        return tongDoanhThu;
-    }
-    */
 }

@@ -1,4 +1,5 @@
-package qlvpp.model; import java.sql.Date;
+package qlvpp.model;
+import java.sql.Date;
 
 public class PhieuNhap { 
     private int maPN; 

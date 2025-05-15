@@ -6,3 +6,4 @@ public class Main {
         SwingUtilities.invokeLater(() -> new LoginGUI().setVisible(true));
     }
 }
+
